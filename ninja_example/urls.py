@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from .api import ninja_api
+
+ninja_api.add_router('/gene/', 'gene.views.router')
+ninja_api.add_router('/genefamily/', 'genefamily.views.router')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', ninja_api.urls),
 ]

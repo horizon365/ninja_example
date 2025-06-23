@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+PROJECT_CODE = 'wheat'
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'gene',
     'genefamily',
+    'ninja'
 ]
 
 MIDDLEWARE = [
