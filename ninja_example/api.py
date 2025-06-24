@@ -81,7 +81,7 @@ ninja_api = NinjaAPI(
 )
 
 
-@ninja_api.get('/home/count')
+@ninja_api.get('/home/count', tags=['v0.1'], response=dict)
 def home(request):
     return dict(gene=Gene.objects.count(),
                 genefamily=GeneFamily.objects.count())
