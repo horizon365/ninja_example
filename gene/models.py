@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 
 from genefamily.models import GeneFamily
 
@@ -21,10 +22,33 @@ class Gene(models.Model):
     gene_network_url = models.CharField(max_length=1024, db_index=True, verbose_name='关联基因网络地址')
     subcellular_localization = models.CharField(max_length=1024, db_index=True, verbose_name='关联亚细胞定位地址')
 
+    @staticmethod
+    def get_query_field():
+        """获取供query查询的参数
+        """
+        query = ['gene_id']
+        foreign_fields = []
+        own_field = ['species', 'chrom', 'gene_family']
+
+        for field in foreign_fields:
+            query.append(field)
+        for field in own_field:
+            query.append(field + '__icontains')
+
+        return query
+
+    @staticmethod
+    def get_aggregations(queryset) -> dict:
+        fields = ['gene_id', 'chrom', 'start', 'end']
+        result = {}
+        for field in fields:
+            grouped = queryset.values(field).annotate(count=Count('gene_id', distinct=True))
+            result[field] = [{'name': item[field], 'count': item['count']}
+                             for item in grouped if item['count'] is not None]
+        return result
+
 class CoExpression(models.Model):
     gene1 = models.ForeignKey(Gene, on_delete=models.CASCADE, verbose_name='Gene1')
     gene2 = models.CharField(max_length=120, db_index=True, verbose_name='Gene2')
     pcc = models.CharField(max_length=120, db_index=True, verbose_name='PCC')
     mr = models.CharField(max_length=120, db_index=True, verbose_name='MR')
-
-
