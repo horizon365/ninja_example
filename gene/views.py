@@ -1,17 +1,18 @@
 from typing import List
+from django.db.models import Max, Min
 from ninja import Router, Query, Path
 from ninja.pagination import paginate
 from gene.models import Gene, CoExpression
 from genefamily.models import GeneFamily
 
-from gene.schema import GeneSchema, GeneFilterSchema, GeneAggregateSchema, CoExpressionSchema, FileTypeEnum
+from gene.schema import GeneSchema,GeneListSchema,  GeneFilterSchema, GeneAggregateSchema, CoExpressionSchema, FileTypeEnum
 
 from ninja_example.api import PGPagination
 # Create your views here.
 
 router = Router()
 
-@router.get('/list_gene/', tags=['v0.1'], response=List[GeneSchema])
+@router.get('/list_gene/', tags=['v0.1'], response=List[GeneListSchema])
 @paginate(PGPagination)
 def list_gene(request, filters: GeneFilterSchema = Query(...)):
     queryset = Gene.objects.all()
@@ -22,8 +23,13 @@ def list_gene(request, filters: GeneFilterSchema = Query(...)):
 def get_aggregations(request, filters: GeneFilterSchema = Query(...)):
     queryset = Gene.objects.all()
     queryset = filters.filter(queryset).distinct()
-    return Gene.get_aggregations(queryset)
-
+    data =dict(
+        gene_id=Gene.get_aggregations(queryset)['gene_id'],
+        chrom=list(queryset.values_list('chrom', flat=True)),
+        start=queryset.aggregate(min=Min('start'),max=Max('start')),
+        end=queryset.aggregate(min=Min('end'),max=Max('end')),
+    )
+    return data
 
 @router.get('/get_gene/{gene_id}', tags=['v0.1'], response=GeneSchema)
 def get_gene(request, gene_id: str=Path(..., example='TraesCS4A02G24260')):

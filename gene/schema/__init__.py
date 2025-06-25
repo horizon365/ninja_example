@@ -9,3 +9,12 @@ class GeneSchema(ModelSchema):
     class Meta:
         model = Gene
         fields = '__all__'
+
+class GeneListSchema(ModelSchema):
+    coordinates: str
+    class Meta:
+        model = Gene
+        exclude = ('start', 'end')
+    @staticmethod
+    def resolve_coordinates(obj):
+        return f'{obj.start} - {obj.end}'

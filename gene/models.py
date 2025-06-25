@@ -27,8 +27,8 @@ class Gene(models.Model):
         """获取供query查询的参数
         """
         query = ['gene_id']
-        foreign_fields = []
-        own_field = ['species', 'chrom', 'gene_family']
+        foreign_fields = ['gene_family__name__icontains']
+        own_field = ['species', 'chrom']
 
         for field in foreign_fields:
             query.append(field)
@@ -39,7 +39,7 @@ class Gene(models.Model):
 
     @staticmethod
     def get_aggregations(queryset) -> dict:
-        fields = ['gene_id', 'chrom', 'start', 'end']
+        fields = ['gene_id']
         result = {}
         for field in fields:
             grouped = queryset.values(field).annotate(count=Count('gene_id', distinct=True))
