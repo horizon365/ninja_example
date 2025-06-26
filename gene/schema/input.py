@@ -12,8 +12,8 @@ class GeneFilterSchema(FilterSchema):
     # 以下为单字段列表内搜索
     gene_id: Optional[str] = Field(None, q='gene_id__in')
     chrom: Optional[str] = Field(None, q='chrom')
-    start: Optional[int] = Field(None, gt=0, q='start')
-    end: Optional[int] = Field(None, q='end')
+    start: Optional[int] = Field(None, gt=0, q='start__gte')
+    end: Optional[int] = Field(None, q='end__lte')
 
     @validator('gene_id')
     @classmethod

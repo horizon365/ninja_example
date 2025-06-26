@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import List, Dict, Union
 from ninja import Schema, ModelSchema, FilterSchema
 from gene.models import Gene, CoExpression
 
@@ -11,8 +11,8 @@ class ItemSchema(Schema):
 class GeneAggregateSchema(Schema):
     gene_id: List[ItemSchema]
     chrom: List[str]
-    start: Dict[str, int]
-    end: Dict[str, int]
+    start: Dict[str, Union[int, None]]
+    end: Dict[str, Union[int, None]]
 
 class CoExpressionSchema(ModelSchema):
     class Meta:
