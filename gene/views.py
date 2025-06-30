@@ -1,3 +1,4 @@
+import pdb
 from typing import List
 from django.db.models import Max, Min
 from ninja import Router, Query, Path
@@ -38,10 +39,11 @@ def get_gene(request, gene_id: str=Path(..., example='TraesCS4A02G24260')):
 
 @router.get('/get_coexpression/{gene_id}', tags=['v0.1'], response=List[CoExpressionSchema])
 @paginate(PGPagination)
-def get_coexpression(request, gene_id: str=Path(..., example='TraesCS4A02G24260')):
-    queryset  =CoExpression.objects.filter(gene_id=gene_id)
+def get_coexpression(request, option: str, gene_id: str=Path(..., example='TraesCS4A02G24260')):
+    queryset  =CoExpression.objects.filter(gene1=gene_id)
     return queryset
 
-@router.get('/get_file/{gene_id}', tags=['v0.1'], response=List[str])
-def get_file(request, type: FileTypeEnum, gene_id: str=Path(..., example='TraesCS4A02G24260')):
-    pass
+
+@router.get('/get_options', tags=['v0.1'], response=List[str])
+def get_file(request, type: FileTypeEnum):
+    return ['a','b']

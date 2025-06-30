@@ -23,5 +23,5 @@ ninja_api.add_router('/genefamily/', 'genefamily.views.router')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', ninja_api.urls),
+    path('wheat_phytock/api/', ninja_api.urls),
 ]
