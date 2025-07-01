@@ -26,6 +26,12 @@ class GeneFilterSchema(FilterSchema):
         return value_data
 
 
-class FileTypeEnum(str, Enum):
+class OptionsTypeEnum(str, Enum):
     GENE_EXPRESSION = "gene_expression"
     CO_EXPRESSION = "co-expression"
+
+
+class FileTypeEnum(str, Enum):
+    CDS_SEQUENCE = "CDS sequence"
+    PROTEIN_SEQUENCE = "Protein sequence"
+    MATURE_PROTEIN_SEQUENCE = 'Mature protein sequence'
